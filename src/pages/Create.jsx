@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useAppContext } from '../store/Store';
+import Layout from '../components/Layout';
+import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
 
@@ -9,13 +12,26 @@ const Create = () => {
   const [completed, setCompleted] = useState(false);
   const [review, setReview] = useState('');
 
+  const store = useAppContext();
+  const navigate = useNavigate();
+
   const onHandleInputChange = ( e, state ) => {
-    const name = e.target.name;
-    console.log(name)
     state(e.target.value)
   }
-  const onHandleOnchangeFile = () => {
 
+  //FUNCION PARA SUBIR IMAGEN AL NAVEGADOR
+  const onHandleOnchangeFile = (e) => {
+    const element = e.target;
+
+    const file = element.files[0];
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file)
+
+    reader.onloadend = () => {
+      setCover(reader.result.toString())
+    }
   }
   
   const onHandleCompleted = (e) => {
@@ -36,10 +52,12 @@ const Create = () => {
     }
 
     //TODO para registrar libro
+    store.createItem(newBook)
+    navigate("/")
   }
 
   return (
-    <div>
+    <Layout>
       <form onSubmit={handleSubmit}>
         <div>
           <div>Title</div>
@@ -52,7 +70,7 @@ const Create = () => {
         <div>
           <div>Cover</div>
           <input type="file" onChange={onHandleOnchangeFile} name="cover"/>
-          <div></div>
+          <div>{ cover ? <img src={cover} width="200" alt="Preview"/> : ''}</div>
         </div>
         <div>
           <div>Introduction</div>
@@ -66,10 +84,9 @@ const Create = () => {
           <div>Review</div>
           <input type="text" onChange={(e)=>onHandleInputChange(e, setReview)} name="review" value={review}/>
         </div>
-
         <input type="submit" value="Register book"/>
       </form>
-    </div>
+    </Layout>
   )
 }
 
