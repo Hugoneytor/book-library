@@ -4,6 +4,7 @@ import Create from './pages/Create';
 import Index from './pages/Index';
 import View from './pages/View';
 import Store from './store/Store';
+import './app.css';
 
 const App = () => {
   return (
