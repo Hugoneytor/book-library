@@ -12,6 +12,8 @@ const Index = () => {
     gap: "10px",
   }
 
+  console.log(store.items)
+
   return (
     <Layout>
       <div style={booksContainer}>
